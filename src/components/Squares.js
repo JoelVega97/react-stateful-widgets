@@ -14,7 +14,7 @@ Only one square (or none) can be active at any given point.
 Find comments below to help you along.
 */
 
-import React from 'react';
+import React, {useState} from 'react';
 
 // Use this variable ONLY to initialize a slice of state!
 const listOfSquareIds = ['sqA', 'sqB', 'sqC', 'sqD'];
@@ -23,13 +23,21 @@ export default function Squares() {
   // Use the state hook twice, as we need two slices of state: 'squares' and
   // 'activeSquare'. One holds the _array_ of square ids, and the other keeps track
   // of the currently active square (if any).
+  const [squares, setListOfSquareIds] = useState(listOfSquareIds)
+  const [activeSquare, setActiveSquare] = useState(null)
 
+  
   const isActive = id => {
     // This is not a click handler but a helper, used inside the JSX, (See below)
     // and should return a class name of active if the id passed
     // matches the active square in state, empty string otherwise.
     // Right-click and "inspect element" on the square to see its effect.
-    return ''
+
+    if (id === activeSquare)
+      {return ' active'}
+    else
+      {return ''}
+
   };
 
   const markActive = id => {
@@ -37,6 +45,16 @@ export default function Squares() {
     // Set the id argument to be the active id in state
     // (unless it already is, in which case we should reset
     // the currently active square id back to initial state).
+
+    /*make the id = activeSquare and if it is change it to the inital state*/
+    
+    if(id === activeSquare ){
+      return setActiveSquare(null)
+    }
+    else{
+      return setActiveSquare(id)
+    }
+
   };
 
   return (
@@ -47,7 +65,7 @@ export default function Squares() {
           /* Nasty bug! We should map over a slice of state, instead of 'listOfSquareIds'.
           We might say: "it works, though!" But if the list of squares is not state,
           we could never add squares, change squares or remove squares in the future. Fix!" */
-          listOfSquareIds.map(id =>
+          squares.map(id =>
             <div
               id={id}
               key={id}
